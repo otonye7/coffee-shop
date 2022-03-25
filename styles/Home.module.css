@@ -93,9 +93,6 @@
     padding-left: 2rem /* 32px */;
     padding-right: 2rem /* 32px */;
   }
-  .heroImage {
-    right: 20%;
-  }
   .cardLayout {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
