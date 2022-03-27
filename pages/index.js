@@ -3,35 +3,7 @@ import Image from 'next/image'
 import Banner from '../components/banner'
 import Card from '../components/card'
 import styles from '../styles/Home.module.css'
-// import coffeeStores from '../data/coffee-store.json';
-
-
-const coffeeStores = [
-  {
-    "id": 0,
-    "name": "StrangeLove Coffee",
-    "imgUrl": "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-    "websiteUrl": "https://www.strangelovecoffee.ca/",
-    "address": "983 Queen St E, Toronto, ON M4M 1K2",
-    "neighbourhood": "at King and Spadina"
-  },
-  {
-    "id": 1,
-    "name": "Dark Horse Coffee",
-    "imgUrl": "https://images.unsplash.com/photo-1498804103079-a6351b050096?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2468&q=80",
-    "websiteUrl": "https://www.darkhorseespresso.com/",
-    "address": "401 Richmond St W",
-    "neighbourhood": "Richmond and Spadina"
-  },
-  {
-    "id": 300,
-    "name": "Route 300",
-    "imgUrl": "https://images.unsplash.com/photo-1498804103079-a6351b050096?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2468&q=80",
-    "websiteUrl": "https://www.darkhorseespresso.com/",
-    "address": "401 Richmond St W",
-    "neighbourhood": "Route 300 Neighbourhood"
-  }
-]
+import coffeeStores from '../data/coffee-store.json';
 
 export async function getStaticProps(context) {
   return {
@@ -58,6 +30,9 @@ export default function Home(props) {
         <div className={styles.heroImage}>
            <Image src="/static/hero-image.png" alt="" width={800} height={400}/>
         </div>
+        {props.coffeeStores.length > 0 && (
+        <>
+        <h2 className={styles.heading2}>Toronto Stores</h2>
         <br />
         <br />
         <br />
@@ -69,6 +44,8 @@ export default function Home(props) {
              )})
           }
         </div>
+        </>
+        )}
       </main> 
     </div>
   )
