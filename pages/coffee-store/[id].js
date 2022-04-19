@@ -1,3 +1,4 @@
+import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -5,16 +6,18 @@ import Image from 'next/image';
 import styles from '../../styles/coffee-store.module.css';
 import cls from 'classnames'; 
 import { fetchCoffeeStores } from '../../lib/coffee-store';
+import { StoreContext } from '../../store/store-context';
+import { isEmpty } from '../../utils';
+
 
 export async function getStaticProps ({ params }) {
     const coffeeStores = await fetchCoffeeStores()
-    //fsq_id
-    console.log(coffeeStores)
+    const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+        return coffeeStore.id.toString() === params.id
+    })
     return {
         props: {
-            coffeeStore: coffeeStores.find(coffeeStore => {
-                return coffeeStore.id.toString() === params.id
-            })
+            coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {}
         }
     }
 }
@@ -34,13 +37,28 @@ export async function getStaticPaths() {
     }
 }
 
-const CoffeeStore = (props) => {
-    console.log(props)
+const CoffeeStore = (initialProps) => {
     const router = useRouter();
+    const id = router.query.id;
+    const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore)
+    const { state: { coffeeStores } } = useContext(StoreContext);
+
+    useEffect(() => {
+        if(isEmpty(initialProps.coffeeStore)){
+            if(coffeeStore.length > 0){
+                const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+                    return coffeeStore.id.toString() === id
+                })
+                setCoffeeStore(findCoffeeStoreById)
+            }
+        }
+    }, [id])
+
     if(router.isFallback === true){
         return <div>LOADING</div>
     }
-    const { location: { address, neighborhood }, name, imgUrl } = props.coffeeStore
+
+    const { location: { address, neighborhood }, name, imgUrl } = coffeeStore
     const handleUpvoteButton = () => {
         console.log("Hanlde Upvote")
     }
@@ -53,7 +71,7 @@ const CoffeeStore = (props) => {
             <div className={styles.col1}>
             <div className={styles.backToHomeLink}>
             <Link href='/'>
-                <a>Back to home</a>
+                <a> Back to home</a>
             </Link>
             </div>
             <div className={styles.nameWrapper}>
